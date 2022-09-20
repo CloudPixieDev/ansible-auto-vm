@@ -1,0 +1,48 @@
+---
+- block:
+  - name: zypper up
+    zypper:
+      name:  '*'
+      state: latest
+      update_cache: yes
+  - name: check if reboot is required
+    stat:
+      path: /boot/do_purge_kernels
+      get_md5: no
+    register: result
+  - name: set a fact for the flag
+    set_fact:
+      rebootrequired: "{{ result.stat.exists }}"
+  - debug: var=rebootrequired
+  when: ansible_os_family == "Suse"
+
+- block:
+  - name: apt update
+    apt:
+      update_cache: True
+      force_apt_get: True
+      cache_valid_time: 3600
+  - name: apt upgrade
+    apt:
+      upgrade: dist
+      force_apt_get: True
+  - name: check if reboot is required
+    stat:
+      path: /var/run/reboot-required
+      get_md5: no
+    register: result
+  - name: set a fact for the flag
+    set_fact:
+      rebootrequired: "{{ result.stat.exists }}"
+  - debug: var=rebootrequired
+  when: ansible_os_family == "Debian"
+
+- name: reboot if requred
+  reboot:
+    msg: "Required reboot after system update by ansible"
+    connect_timeout: 5
+    reboot_timeout: 600
+    pre_reboot_delay: 0
+    post_reboot_delay: 30
+    test_command: uptime
+  when: rebootrequired | bool

@@ -1,0 +1,45 @@
+# supress the startup message
+# startup_message off
+
+# execute .bash_profile on startup
+shell -$SHELL
+
+# so the default ctrl-a doesn't interfere with emacs cmd-line editing
+# escape <ctrl><meta>
+# use ctrl-] for screen command escape, (just like telnet)
+# and ctrl-] ] to send a ctrl-] thru screen to the subprocess
+# within the screen session - say to a telnet session 
+escape ^]]
+
+# 100 scrollback lines is too few
+defscrollback 8192
+
+# detach automatically on disconnect
+autodetach on
+
+# altscreen to enable virtual terminals like in xterms (less and vi don't polute the widow on exit)
+altscreen on
+
+# have page up/down enter copy mode automatically and pageup and down
+# you need to hit ESC to exit copy mode to stop scrolling and return to command line
+bindkey "^[[5~" eval "copy" "stuff ^b"
+bindkey "^[[6~" eval "copy" "stuff ^f"
+
+# turn logging on for all windows
+#deflog on
+
+#tell screen where to log
+logfile screenlog.%t.%n
+
+# change the hardstatus settings to give an window list at the bottom of the                                                     
+hardstatus on
+hardstatus alwayslastline
+hardstatus string " %{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H %{..Y} %m/%d %0c "
+
+# screen, with the time and date and with the current window highlighted                                  
+#hardstatus string "%{= KW}%-w%{= wk}%50>%n %t%{-}%+w%<"
+#hardstatus string '%{= kG}%-Lw%{= kW}%50> %n%f* %t%{= kG}%+Lw%< %{= kG}%-=%D %d %M %Y %c:%s%{-}'
+#hardstatus string '%{= kG}[ %{G}%H %{g}]%-Lw%{= kW}%50> %n%f* %t%{= kG}%+Lw%< %{= kG}%-=%D %d %M %Y %c:%s%{-}'
+#hardstatus string '%{= kG}[ %{B}%H %{G}][%= %{= kw}%?%-Lw%?%{r}(%{G}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{G}][%{B} %D %d %M %Y %{W}%c:%s %{G}]'
+#hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B} %d/%m/%Y %{W}%c:%s %{g}]'
+

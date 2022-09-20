@@ -1,0 +1,83 @@
+---
+- name: create admin user
+  user:
+    name: "{{ auto_user }}"
+    shell: /bin/bash
+    uid: "{{ auto_uid }}"
+    group: "{{ auto_group }}"
+    state: present
+    password: "{{ auto_password }}"
+
+- name: install sudo
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - sudo
+    - tmux
+    - screen
+
+- name: provide sudo access
+  copy:
+    dest: "/etc/sudoers.d/{{ auto_user }}"
+    content: "{{ auto_user }} ALL=(ALL) NOPASSWD: ALL"
+
+- name: create ssh dir
+  file:
+    path: /home/{{ auto_user }}/.ssh
+    state: directory
+    mode: '700'
+    owner: "{{ auto_user }}"
+    group: "{{ auto_group }}"
+
+- name: create ssh key
+  become: yes
+  become_user: "{{ auto_user }}"
+  command: ssh-keygen -t {{ auto_key_type }} -f /home/{{ auto_user }}/.ssh/id_{{ auto_key_type }} -N ''
+  args:
+    creates: /home/{{ auto_user }}/.ssh/id_{{ auto_key_type }}
+  register: newkey
+
+- name: update user authkey
+  become: yes
+  become_user: "{{ auto_user }}"
+  shell:
+    chdir: /home/{{ auto_user }}/.ssh/
+    cmd: cat id_{{ auto_key_type }}.pub >> authorized_keys
+  when: '"Generating" in newkey.stdout'
+
+- name: host user key to remote authorized_keys
+  authorized_key:
+    user: "{{ auto_user }}"
+    key: "{{ lookup('file', '~/.ssh/id_{{ auto_key_type }}.pub') }}"
+    state: present
+
+- name: install ssh config
+  template:
+    src: ssh_config
+    dest: /home/{{ auto_user }}/.ssh/config
+    owner: "{{ auto_user }}"
+    group: "{{ auto_group }}"
+
+- name: install persistent console deps
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - tmux
+    - screen
+      
+- name: install tmux config
+  copy:
+    src: tmux.conf
+    dest: /home/{{ auto_user }}/.tmux.conf
+    owner: "{{ auto_user }}"
+    group: "{{ auto_group }}"
+
+- name: install screenrc
+  copy:
+    src: screenrc
+    dest: /home/{{ auto_user }}/.screenrc
+    owner: "{{ auto_user }}"
+    group: "{{ auto_group }}"
+

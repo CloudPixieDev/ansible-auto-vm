@@ -1,0 +1,5 @@
+---
+become_user: root
+become_method: sudo
+become_pass: '{{ guest_sudo_pass }}'
+ansible_python_interpreter: /usr/bin/python3

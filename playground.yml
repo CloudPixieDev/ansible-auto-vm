@@ -1,0 +1,12 @@
+---
+- hosts: guest
+  vars_files: vault.yml
+  gather_facts: True
+  become: True
+  roles:
+    - role: auto_user
+      tags: [ user ]
+    - role: os_update
+      tags: [ update ]
+    - role: hostname-avahi
+      tags: [ name ]

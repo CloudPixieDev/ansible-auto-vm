@@ -1,0 +1,7 @@
+---
+auto_user: auto
+# openssl passwd -6 -salt 'salt'
+auto_password: $6$34tasdfh08AALKJH$XDGedOr4DjlN4jTWLwmlZA5.rMhqHm/AXD0eDN0KBvudpf/Tqdn/nkDfn0DPcqIBJiiIVN2T.FKfzim0V2nFi1
+auto_key_type: ed25519
+auto_group: users
+auto_uid: 2001

@@ -1,0 +1,5 @@
+[guest:vars]
+guest_hostname = playground
+
+[guest]
+192.168.108.133

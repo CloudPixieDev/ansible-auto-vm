@@ -1,0 +1,5 @@
+Host *
+  IdentityFile ~/.ssh/id_{{ auto_key_type }}
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+  LogLevel QUIET
