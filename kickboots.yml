@@ -1,0 +1,13 @@
+---
+- hosts: guest
+  vars_files: vault.yml
+  gather_facts: true
+  become_user: root
+  become: true
+  roles:
+    - role: golang
+      tags: [ golang ]
+    - role: libvirt
+      tags: [ libvirt ]
+    - role: vagrant
+      tags: [ vagrant ]

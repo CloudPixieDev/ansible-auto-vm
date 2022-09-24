@@ -1,0 +1,33 @@
+---
+- name: add repo for vagrant
+  zypper_repository:
+    repo: 'https://download.opensuse.org/repositories/Virtualization:/vagrant/{{ osver }}/Virtualization:vagrant.repo'
+    state: present
+    runrefresh: true
+    auto_import_keys: true
+  when: ansible_os_family == "Suse"
+
+- name: add repo for ruby
+  zypper_repository:
+    repo: 'https://download.opensuse.org/repositories/devel:/languages:/ruby/{{ osver }}/devel:languages:ruby.repo'
+    state: present
+    runrefresh: true
+    auto_import_keys: true
+  when: ansible_os_family == "Suse"
+
+- name: add repo for ruby extensions
+  zypper_repository:
+    repo: 'https://download.opensuse.org/repositories/devel:/languages:/ruby:/extensions/{{ osver }}/devel:languages:ruby:extensions.repo'
+    state: present
+    runrefresh: true
+    auto_import_keys: true
+  when: ansible_os_family == "Suse"
+    
+- name: add vagrant
+  zypper:
+    name: "{{ item }}"
+    state: latest
+    disable_recommends: yes
+  with_items:
+    - vagrant
+    - vagrant-libvirt

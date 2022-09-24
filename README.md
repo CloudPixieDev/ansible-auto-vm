@@ -262,3 +262,56 @@ for privleged access:
 	drwx------ 1 root root   0 Mar 15  2022 .gnupg
 	drwxr-xr-x 1 root root  36 Sep 19 08:37 inst-sys
 
+## Starting with a VM Laboratory
+
+Assuming you have a VM playground as a 'lab,' make sure the hypervisor has the following setting under `Processors` in the `Advanced optinos`
+
+	 Enable hypervisor applications in this virtual machine
+
+Proceed to install [Golang](https://go.dev/) and [Boots](https://docs.tinkerbell.org/services/boots/), the PXE utilities platform for [Tinkerbell](https://tinkerbell.org/) project from [Equinix Metal](https://metal.equinix.com/product/tinkerbell-oss/), on an openSUSE Leap VM.
+
+
+### Disable mitigatinos for this VM LAB
+
+Introduce 'mitigations=off' to /etc/default/grub so that we can have KVM instances in the VM (and even nested for more play).
+
+	ansible-playbook kickboots.yml -t mitigations-off
+	
+
+### Add Golang
+
+Using zypper [devel:languages:go](https://download.opensuse.org/repositories/devel:/languages:/go/) repo from [OBS](https://build.opensuse.org/project/show/devel:languages:go)
+
+We'll use ansible to add the repo and install go.
+
+#### Manual version
+
+	sudo zypper ar -f https://download.opensuse.org/repositories/devel:/languages:/go/15.4/devel:languages:go.repo
+	sudo zypper --gpg-auto-import-keys -n ref
+	sudo zypper in -y go
+
+Results in something like this if you're curious
+
+	The following 25 NEW packages are going to be installed:
+	  binutils cpp cpp7 gcc gcc7 glibc-devel go go1.19 libasan4
+	  libatomic1 libcilkrts5 libctf0 libctf-nobfd0 libgomp1
+	  libisl15 libitm1 liblsan0 libmpc3 libmpfr6 libmpx2
+	  libmpxwrappers2 libtsan0 libubsan0 libxcrypt-devel
+	  linux-glibc-devel
+
+	Overall download size: 185.6 MiB. Already cached: 0 B. After the operation, additional 835.6 MiB will be used.
+
+#### Ansible golang role and tag
+
+	ansible-playbook kickboots.yml -t golang
+
+### Add Boots
+
+Github [latest](https://github.com/tinkerbell/boots/releases/latest) release is here. But it's only released as a tarball.
+
+### Add libvirt
+
+Similar to golang using OBS repos
+
+	https://download.opensuse.org/repositories/Virtualization/15.4/Virtualization.repo
+

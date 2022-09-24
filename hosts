@@ -1,5 +1,5 @@
 [guest:vars]
-guest_hostname = playground
+guest_hostname = tink-test
 
 [guest]
-192.168.108.133
+tink-test ansible_host=192.168.108.139

@@ -1,0 +1,13 @@
+---
+- name: add repo
+  zypper_repository:
+    repo: 'https://download.opensuse.org/repositories/devel:/languages:/go/{{ osver }}/devel:languages:go.repo'
+    state: present
+    runrefresh: true
+    auto_import_keys: true
+  when: ansible_os_family == "Suse"
+
+- name: add go
+  package:
+    name: go
+    state: latest

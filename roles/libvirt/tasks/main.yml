@@ -1,0 +1,26 @@
+---
+- name: add repo
+  zypper_repository:
+    repo: 'https://download.opensuse.org/repositories/Virtualization/{{ osver }}/Virtualization.repo'
+    state: present
+    runrefresh: true
+    auto_import_keys: true
+  when: ansible_os_family == "Suse"
+
+- name: add libvirt
+  zypper:
+    name: "{{ item }}"
+    state: latest
+    disable_recommends: yes
+  with_items:
+    - libvirt
+    - libvirt-client
+    - qemu
+    - qemu-kvm
+
+- name: enable libvirtd
+  systemd:
+    name: libvirtd
+    enabled: yes
+    masked: no
+    state: started
