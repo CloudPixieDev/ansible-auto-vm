@@ -6,6 +6,7 @@
     runrefresh: true
     auto_import_keys: true
   when: ansible_os_family == "Suse"
+  ignore_errors: yes
 
 - name: add repo for ruby
   zypper_repository:
@@ -14,6 +15,7 @@
     runrefresh: true
     auto_import_keys: true
   when: ansible_os_family == "Suse"
+  ignore_errors: yes
 
 - name: add repo for ruby extensions
   zypper_repository:
@@ -22,12 +24,10 @@
     runrefresh: true
     auto_import_keys: true
   when: ansible_os_family == "Suse"
+  ignore_errors: yes
     
 - name: add vagrant
   zypper:
-    name: "{{ item }}"
+    name: [ 'vagrant', 'vagrant-libvirt' ]
     state: latest
     disable_recommends: yes
-  with_items:
-    - vagrant
-    - vagrant-libvirt

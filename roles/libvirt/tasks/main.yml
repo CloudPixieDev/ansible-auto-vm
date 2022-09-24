@@ -6,17 +6,13 @@
     runrefresh: true
     auto_import_keys: true
   when: ansible_os_family == "Suse"
+  ignore_errors: yes
 
 - name: add libvirt
   zypper:
-    name: "{{ item }}"
+    name:  [ 'libvirt', 'libvirt-client', 'libvirt-bash-completion', 'qemu', 'qemu-kvm' ]
     state: latest
     disable_recommends: yes
-  with_items:
-    - libvirt
-    - libvirt-client
-    - qemu
-    - qemu-kvm
 
 - name: enable libvirtd
   systemd:

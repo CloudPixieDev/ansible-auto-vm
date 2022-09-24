@@ -5,6 +5,8 @@
   become_user: root
   become: true
   roles:
+    - role: zypper
+      tags: [ zypper ]
     - role: golang
       tags: [ golang ]
     - role: libvirt

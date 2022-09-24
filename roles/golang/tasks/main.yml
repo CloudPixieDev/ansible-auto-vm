@@ -6,6 +6,7 @@
     runrefresh: true
     auto_import_keys: true
   when: ansible_os_family == "Suse"
+  ignore_errors: yes
 
 - name: add go
   package:

@@ -1,0 +1,6 @@
+---
+- name: add galaxy
+  command: ansible-galaxy collection install community.general
+  delegate_to: 127.0.0.1
+  become: false
+  
