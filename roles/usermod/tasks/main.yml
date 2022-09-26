@@ -1,0 +1,6 @@
+---
+- name: append groups to auto user
+  user:
+    name: auto
+    groups: kvm,libvirt,vagrant,qemu
+    append: yes

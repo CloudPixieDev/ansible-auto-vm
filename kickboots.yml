@@ -13,3 +13,5 @@
       tags: [ libvirt ]
     - role: vagrant
       tags: [ vagrant ]
+    - role: usermod
+      tags: [ usermod ]
